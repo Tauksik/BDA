@@ -1,0 +1,98 @@
+bmsce@bmsce-OptiPlex-3060:~$ mongo
+MongoDB shell version v3.6.8
+connecting to: mongodb://127.0.0.1:27017
+Implicit session: session { "id" : UUID("4c20cc95-84fe-4c39-bfe7-b2db2924b9a8") }
+MongoDB server version: 3.6.8
+Server has startup warnings: 
+2023-04-01T15:17:34.150+0530 I STORAGE  [initandlisten] 
+2023-04-01T15:17:34.150+0530 I STORAGE  [initandlisten] ** WARNING: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine
+2023-04-01T15:17:34.150+0530 I STORAGE  [initandlisten] **          See http://dochub.mongodb.org/core/prodnotes-filesystem
+2023-04-01T15:17:39.282+0530 I CONTROL  [initandlisten] 
+2023-04-01T15:17:39.282+0530 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2023-04-01T15:17:39.282+0530 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2023-04-01T15:17:39.282+0530 I CONTROL  [initandlisten] 
+> use tauksikdb
+switched to db tauksikdb
+> db
+tauksikdb
+> show dbs
+BDA       0.000GB
+Students  0.000GB
+admin     0.000GB
+clg       0.000GB
+config    0.000GB
+labtest   0.000GB
+local     0.000GB
+myDB      0.000GB
+nandita   0.000GB
+p         0.000GB
+p2        0.000GB
+> db.createCollection("Student")
+{ "ok" : 1 }
+> db.createCollection("Student");
+{
+	"ok" : 0,
+	"errmsg" : "a collection 'tauksikdb.Student' already exists",
+	"code" : 48,
+	"codeName" : "NamespaceExists"
+}
+> db.student.insert({id:1, name:"abc", grade:7, hobbies:"Swimming"})
+WriteResult({ "nInserted" : 1 })
+> db.student.insert({id:2, name:"xyz", grade:8, hobbies:"Running"})
+WriteResult({ "nInserted" : 1 })
+> db.student.insert({id:3, name:"xbu", grade:9, hobbies:"Football"})
+WriteResult({ "nInserted" : 1 })
+> db.student.insert({id:3, name:"xbu", grade:9},{$set:{hobbies:"Basketball"}},{upset:true})
+WriteResult({ "nInserted" : 1 })
+> db.student.find({name:"abc"})
+{ "_id" : ObjectId("6427b737aff2c5c084fec6f5"), "id" : 1, "name" : "abc", "grade" : 7, "hobbies" : "Swimming" }
+> db.student.insert({id:3, name:"klf", grade:9, hobbies:"Baseball"})
+WriteResult({ "nInserted" : 1 })
+> db.student.find({grade:9})
+{ "_id" : ObjectId("6427b782aff2c5c084fec6f7"), "id" : 3, "name" : "xbu", "grade" : 9, "hobbies" : "Football" }
+{ "_id" : ObjectId("6427b811aff2c5c084fec6f8"), "id" : 3, "name" : "xbu", "grade" : 9 }
+{ "_id" : ObjectId("6427b877aff2c5c084fec6f9"), "id" : 3, "name" : "klf", "grade" : 9, "hobbies" : "Baseball" }
+> db.student.find({name:/^M/}).pretty()
+> db.student.find({name:/^e/}).pretty()
+> db.student.count()
+5
+> db.student.find().sort({name:-1}).pretty()
+{
+	"_id" : ObjectId("6427b74faff2c5c084fec6f6"),
+	"id" : 2,
+	"name" : "xyz",
+	"grade" : 8,
+	"hobbies" : "Running"
+}
+{
+	"_id" : ObjectId("6427b782aff2c5c084fec6f7"),
+	"id" : 3,
+	"name" : "xbu",
+	"grade" : 9,
+	"hobbies" : "Football"
+}
+{
+	"_id" : ObjectId("6427b811aff2c5c084fec6f8"),
+	"id" : 3,
+	"name" : "xbu",
+	"grade" : 9
+}
+{
+	"_id" : ObjectId("6427b877aff2c5c084fec6f9"),
+	"id" : 3,
+	"name" : "klf",
+	"grade" : 9,
+	"hobbies" : "Baseball"
+}
+{
+	"_id" : ObjectId("6427b737aff2c5c084fec6f5"),
+	"id" : 1,
+	"name" : "abc",
+	"grade" : 7,
+	"hobbies" : "Swimming"
+}
+> db.student.update({id:3, name:"xbu", grade:9},{$set:{hobbies:"Basketball"}},{upset:true})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> ^C
+bye
+bmsce@bmsce-OptiPlex-3060:~$ 
